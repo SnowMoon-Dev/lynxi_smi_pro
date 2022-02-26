@@ -1,5 +1,4 @@
 project_name: lynxi-smi-pro
-dist: ./bin
 before:
   hooks:
     - go mod tidy
