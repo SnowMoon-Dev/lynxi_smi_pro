@@ -1,5 +1,6 @@
 # lynxi-smi-pro
 ![GitHub](https://img.shields.io/github/license/SnowMoon-Dev/lynxi_smi_pro?label=license)
+
 Get informations about the system's APU(s), through lynxi-smi.
 
 #Features
