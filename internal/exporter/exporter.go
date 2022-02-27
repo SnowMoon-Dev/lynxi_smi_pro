@@ -144,6 +144,23 @@ func QueryLynAPUsInfo(qFieldsRaw string) {
 				numaNodeId = removeLineBreak(numaNodeId)
 				numaCpuList, _ := getPciDeviceInfo(pciChipIndex, chipIndex, pciInfoStrList, NumaCPUList)
 				numaCpuList = removeLineBreak(numaCpuList)
+				log.WithFields(log.Fields{
+					__PRODUCT_NAME_STR__: boardBaseInfo.ProductName,
+					__CHIP_COUNT_STR__:   boardBaseInfo.ChipCount,
+					__VENDOR_ID_STR__:    vendorId,
+					__DEVICE_ID_STR__:    deviceId,
+					SubSystemVendor:      subVendorId,
+					SubSystemDevice:      subDeviceId,
+					__BUS_NUM__:          busNum,
+					__DEVICE__:           device,
+					__FUNCTION__:         function,
+					CurrentLinkSpeed:     currentSpeed,
+					CurrentLinkWidth:     currentWidth,
+					MaxLinkSpeed:         maxSpeed,
+					MaxLinkWidth:         maxWidth,
+					NumaNode:             numaNodeId,
+					NumaNodeCPUList:      numaCpuList,
+				}).Debug("Board Summery Info")
 				boardPciDeviceInfo.Set(vendorId, deviceId, subVendorId, subDeviceId, busNum,
 					device, function, maxSpeed, maxWidth, currentSpeed,
 					currentWidth, numaNodeId, numaCpuList)
@@ -268,9 +285,7 @@ func QueryLynAPUsInfo(qFieldsRaw string) {
 	printAPUsInfoTitle(qFields)
 	for _, v := range boardBaseInfoList {
 		mapData := structToMap(v)
-		log.Debugf("MapData: %s\n", mapData)
 		boardBaseInfoStrMap := apusInfoToFlatMap(mapData)
-		log.Debugf("boardBaseInfoStrMap: %s\n", boardBaseInfoStrMap)
 		for i, qField := range qFields {
 			val := getAPUInfoByBoardMapInfo(boardBaseInfoStrMap, qField)
 			if len(qFields)-1 != i {

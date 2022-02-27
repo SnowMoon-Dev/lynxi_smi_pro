@@ -220,21 +220,21 @@ var (
 		__UTILIZATION_IPE_FPS_CHIP0_KEY__,
 		__UTILIZATION_IPE_FPS_CHIP1_KEY__,
 		__UTILIZATION_IPE_FPS_CHIP2_KEY__,
-		__PCI_SUB_VENDOR_ID_CHIP0_KEY__,
-		__PCI_SUB_VENDOR_ID_CHIP1_KEY__,
-		__PCI_SUB_VENDOR_ID_CHIP2_KEY__,
 		__PCI_VENDOR_ID_CHIP0_KEY__,
 		__PCI_VENDOR_ID_CHIP1_KEY__,
 		__PCI_VENDOR_ID_CHIP2_KEY__,
-		__PCI_BUS_CHIP0_KEY__,
-		__PCI_BUS_CHIP1_KEY__,
-		__PCI_BUS_CHIP2_KEY__,
 		__PCI_DEVICE_ID_CHIP0_KEY__,
 		__PCI_DEVICE_ID_CHIP1_KEY__,
 		__PCI_DEVICE_ID_CHIP2_KEY__,
+		__PCI_SUB_VENDOR_ID_CHIP0_KEY__,
+		__PCI_SUB_VENDOR_ID_CHIP1_KEY__,
+		__PCI_SUB_VENDOR_ID_CHIP2_KEY__,
 		__PCI_SUB_DEVICE_ID_CHIP0_KEY__,
 		__PCI_SUB_DEVICE_ID_CHIP1_KEY__,
 		__PCI_SUB_DEVICE_ID_CHIP2_KEY__,
+		__PCI_BUS_CHIP0_KEY__,
+		__PCI_BUS_CHIP1_KEY__,
+		__PCI_BUS_CHIP2_KEY__,
 		__PCI_DEVICE_CHIP0_KEY__,
 		__PCI_DEVICE_CHIP1_KEY__,
 		__PCI_DEVICE_CHIP2_KEY__,
@@ -687,7 +687,7 @@ func (pdi *BoardPciDeviceInfo) Set(vendorId string, deviceId string, subVendorId
 }
 
 const (
-	DefaultPciDevicesInfoPath = "/sys/bus/pci/devices/0000:" // /sys/bus/pci/devices/0000:e5:00.0
+	DefaultPciDevicesInfoPath = "/sys/bus/pci/devices/0000:"
 	NumaNode                  = "numa_node"
 	NumaNodeCPUList           = "local_cpulist"
 	CurrentLinkSpeed          = "current_link_speed"
@@ -1253,7 +1253,6 @@ func apusInfoToFlatMap(mapData map[string]interface{}) map[string]string {
 	ecc_errors_uncorrected_chips := getMapDataSliceValByKeyName(__ECC_ERRORS_UNCORRECTED_TOTAL_CHIPS_KEY__, mapData)
 	pci_chips := getMapDataSliceValByKeyName(__PCI_CHIPS__KEY__, mapData)
 	clocks := getMapDataMapValByKeyName(__CLOCKS_KEY__, mapData)
-
 	for i := 0; i < chip_count; i++ {
 		keyName := getMapDataKeyIndex(__UUID_CHIP_KEY__, i)
 		mapData[keyName] = uuid_list[i]
@@ -1284,15 +1283,15 @@ func apusInfoToFlatMap(mapData map[string]interface{}) map[string]string {
 		keyName = getMapDataKeyIndex(__PCI_VENDOR_ID_CHIP_KEY__, i)
 		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_VENDOR_ID_KEY__, i, pci_chips)
 		keyName = getMapDataKeyIndex(__PCI_DEVICE_ID_CHIP_KEY__, i)
-		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_DEVICE_ID_CHIP_KEY__, i, pci_chips)
+		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_DEVICE_ID_KEY__, i, pci_chips)
 		keyName = getMapDataKeyIndex(__PCI_SUB_VENDOR_ID_CHIP_KEY__, i)
-		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_SUB_VENDOR_ID_CHIP_KEY__, i, pci_chips)
+		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_SUB_VENDOR_ID_KEY__, i, pci_chips)
 		keyName = getMapDataKeyIndex(__PCI_SUB_DEVICE_ID_CHIP_KEY__, i)
-		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_SUB_DEVICE_ID_CHIP_KEY__, i, pci_chips)
+		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_SUB_DEVICE_ID_KEY__, i, pci_chips)
 		keyName = getMapDataKeyIndex(__PCI_BUS_CHIP_KEY__, i)
 		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_BUS_KEY__, i, pci_chips)
 		keyName = getMapDataKeyIndex(__PCI_DEVICE_CHIP_KEY__, i)
-		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_DEVICE_ID_KEY__, i, pci_chips)
+		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_DEVICE_KEY__, i, pci_chips)
 		keyName = getMapDataKeyIndex(__PCI_SUB_FUNCTION_CHIP_KEY__, i)
 		mapData[keyName] = getMapDataDeepMapValByKeyName(__PCI_SUB_FUNCTION_KEY__, i, pci_chips)
 		keyName = getMapDataKeyIndex(__PCIE_LINK_SPEED_CURRENT_CHIP_KEY__, i)
@@ -1335,7 +1334,6 @@ func apusInfoToFlatMap(mapData map[string]interface{}) map[string]string {
 	delete(mapData, __ECC_ERRORS_UNCORRECTED_TOTAL_CHIPS_KEY__)
 	delete(mapData, __PCI_CHIPS__KEY__)
 	delete(mapData, __CLOCKS_KEY__)
-	log.Debug("mapData", mapData)
 	return flatMapDataToFlatDataStringMapData(mapData)
 }
 
