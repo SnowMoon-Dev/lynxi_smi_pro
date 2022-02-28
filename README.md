@@ -4,13 +4,13 @@
 
 Get informations about the system's APU(s), through lynxi-smi.
 
-#Features
+# Features
 * Get the number of APUs 
 * Get the driver's version
 * Get the number of KA200
 * Get APU or hardware Detail info.
 
-#Usage
+# Usage
 ```
 usage: lynxi-smi-pro [<flags>]
 
