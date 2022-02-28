@@ -144,6 +144,9 @@ func QueryLynAPUsInfo(qFieldsRaw string) {
 				numaNodeId = removeLineBreak(numaNodeId)
 				numaCpuList, _ := getPciDeviceInfo(pciChipIndex, chipIndex, pciInfoStrList, NumaCPUList)
 				numaCpuList = removeLineBreak(numaCpuList)
+				if strings.Contains(numaCpuList, __COMMA_SEP__) {
+					numaCpuList = strings.Replace(numaCpuList, __COMMA_SEP__, __SPCAE_SEP__, -1)
+				}
 				log.WithFields(log.Fields{
 					__PRODUCT_NAME_STR__: boardBaseInfo.ProductName,
 					__CHIP_COUNT_STR__:   boardBaseInfo.ChipCount,
