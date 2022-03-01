@@ -182,6 +182,45 @@ var (
 		__ECC_ERRORS_UNCORRECTED_TOTAL_CHIP1_KEY__: "ecc.errors.uncorrected.total.chip1",
 		__ECC_ERRORS_UNCORRECTED_TOTAL_CHIP2_KEY__: "ecc.errors.uncorrected.total.chip2",
 	}
+	fallbackQFieldUnit = map[qField]string{
+		__FAN_SPEED_KEY__:                   "[%]",
+		__UTILIZATION_APU_TOTAL_KEY__:       "[%]",
+		__UTILIZATION_APU_CHIP0_KEY__:       "[%]",
+		__UTILIZATION_APU_CHIP1_KEY__:       "[%]",
+		__UTILIZATION_APU_CHIP2_KEY__:       "[%]",
+		__UTILIZATION_CPU_TOTAL_KEY__:       "[%]",
+		__UTILIZATION_CPU_CHIP0_KEY__:       "[%]",
+		__UTILIZATION_CPU_CHIP1_KEY__:       "[%]",
+		__UTILIZATION_CPU_CHIP2_KEY__:       "[%]",
+		__UTILIZATION_VIC_TOTAL_KEY__:       "[%]",
+		__UTILIZATION_VIC_CHIP0_KEY__:       "[%]",
+		__UTILIZATION_VIC_CHIP1_KEY__:       "[%]",
+		__UTILIZATION_VIC_CHIP2_KEY__:       "[%]",
+		__UTILIZATION_MEMORY_TOTAL_KEY__:    "[%]",
+		__UTILIZATION_MEMORY_CHIP0_KEY__:    "[%]",
+		__UTILIZATION_MEMORY_CHIP1_KEY__:    "[%]",
+		__UTILIZATION_MEMORY_CHIP2_KEY__:    "[%]",
+		__POWER_DRAW__:                      "[W]",
+		__POWER_LIMIT__:                     "[W]",
+		__CLOCKS_CURRENT_APU_CHIP0_KEY__:    "[MHz]",
+		__CLOCKS_CURRENT_APU_CHIP1_KEY__:    "[MHz]",
+		__CLOCKS_CURRENT_APU_CHIP2_KEY__:    "[MHz]",
+		__CLOCKS_CURRENT_CPU_CHIP0_KEY__:    "[MHz]",
+		__CLOCKS_CURRENT_CPU_CHIP1_KEY__:    "[MHz]",
+		__CLOCKS_CURRENT_CPU_CHIP2_KEY__:    "[MHz]",
+		__CLOCKS_CURRENT_MEMORY_CHIP0_KEY__: "[MHz]",
+		__CLOCKS_CURRENT_MEMORY_CHIP1_KEY__: "[MHz]",
+		__CLOCKS_CURRENT_MEMORY_CHIP2_KEY__: "[MHz]",
+		__CLOCKS_MAX_APU_CHIP0_KEY__:        "[MHz]",
+		__CLOCKS_MAX_APU_CHIP1_KEY__:        "[MHz]",
+		__CLOCKS_MAX_APU_CHIP2_KEY__:        "[MHz]",
+		__CLOCKS_MAX_CPU_CHIP0_KEY__:        "[MHz]",
+		__CLOCKS_MAX_CPU_CHIP1_KEY__:        "[MHz]",
+		__CLOCKS_MAX_CPU_CHIP2_KEY__:        "[MHz]",
+		__CLOCKS_MAX_MEMORY_CHIP0_KEY__:     "[MHz]",
+		__CLOCKS_MAX_MEMORY_CHIP1_KEY__:     "[MHz]",
+		__CLOCKS_MAX_MEMORY_CHIP2_KEY__:     "[MHz]",
+	}
 	fallbackQField = []qField{
 		__TIMESTAMP_KEY__,
 		__BOARD_INDEX_KEY__,
@@ -1012,6 +1051,9 @@ func removeLineBreak(info string) string {
 	return strings.Replace(info, __LINE_FEED_STR__, "", -1)
 }
 
+func removePciInfoUnit(info string) string {
+	return strings.Split(info, __SPCAE_SEP__)[0]
+}
 func computePciChipIndex(line string, currentBoardIndex *int, boardIndex *int, pciChipIndex *int) {
 	if strings.Contains(line, __VENDOR_ID_STR__) && !strings.Contains(line, __SUB_STR__) {
 		if *currentBoardIndex == *boardIndex {
@@ -1025,7 +1067,7 @@ func computePciChipIndex(line string, currentBoardIndex *int, boardIndex *int, p
 
 func getClocksVal(r *bufio.Reader, infoList []string, index int) {
 	line, _ := r.ReadString(__LINE_FEED_SEP__)
-	infoList[index] = strings.Split(getBoardInfoVal(line), __SPCAE_SEP__)[0]
+	infoList[index] = getBoardInfoVal(line)
 }
 
 func getBoardUtilTotalVal(utilStr string) string {
@@ -1116,7 +1158,7 @@ func getBoardInfoVal(infoStr string) string {
 		}
 		val = strings.TrimSpace(infoStrSlice[_index])
 	}
-	if strings.Contains(val, __V_SEP__) || strings.Contains(val, __C_SEP__) || strings.Contains(val, __W_SEP__) {
+	if strings.Contains(val, __V_SEP__) || strings.Contains(val, __C_SEP__) {
 		return strings.Split(val, __SPCAE_SEP__)[0]
 	}
 	return val
@@ -1159,10 +1201,11 @@ func removeAndReplaceBaseInfo(line string) string {
 
 func printAPUsInfoTitle(q []qField) {
 	for i, v := range q {
+		val := string(v) + __SPCAE_SEP__ + fallbackQFieldUnit[v]
 		if len(q)-1 != i {
-			fmt.Print(v + __COMMA_SEP__ + __SPCAE_SEP__)
+			fmt.Print(val + __COMMA_SEP__ + __SPCAE_SEP__)
 		} else {
-			fmt.Println(v)
+			fmt.Println(val)
 		}
 	}
 }

@@ -133,19 +133,19 @@ func QueryLynAPUsInfo(qFieldsRaw string) {
 				function, _ := getPciDeviceInfo(pciChipIndex, chipIndex, pciInfoStrList, Function)
 				function = removeLineBreak(function)
 				maxSpeed, _ := getPciDeviceInfo(pciChipIndex, chipIndex, pciInfoStrList, MaxSpeed)
-				maxSpeed = removeLineBreak(maxSpeed)
+				maxSpeed = removePciInfoUnit(removeLineBreak(maxSpeed))
 				maxWidth, _ := getPciDeviceInfo(pciChipIndex, chipIndex, pciInfoStrList, MaxWidth)
-				maxWidth = removeLineBreak(maxWidth)
+				maxWidth = removePciInfoUnit(removeLineBreak(maxWidth))
 				currentSpeed, _ := getPciDeviceInfo(pciChipIndex, chipIndex, pciInfoStrList, CurrentSpeed)
-				currentSpeed = removeLineBreak(currentSpeed)
+				currentSpeed = removePciInfoUnit(removeLineBreak(currentSpeed))
 				currentWidth, _ := getPciDeviceInfo(pciChipIndex, chipIndex, pciInfoStrList, CurrentWidth)
-				currentWidth = removeLineBreak(currentWidth)
+				currentWidth = removePciInfoUnit(removeLineBreak(currentWidth))
 				numaNodeId, _ := getPciDeviceInfo(pciChipIndex, chipIndex, pciInfoStrList, NumaNodeId)
 				numaNodeId = removeLineBreak(numaNodeId)
 				numaCpuList, _ := getPciDeviceInfo(pciChipIndex, chipIndex, pciInfoStrList, NumaCPUList)
 				numaCpuList = removeLineBreak(numaCpuList)
 				if strings.Contains(numaCpuList, __COMMA_SEP__) {
-					numaCpuList = strings.Replace(numaCpuList, __COMMA_SEP__, __SPCAE_SEP__, -1)
+					numaCpuList = strings.Replace(numaCpuList, __COMMA_SEP__, "_", -1)
 				}
 				log.WithFields(log.Fields{
 					__PRODUCT_NAME_STR__: boardBaseInfo.ProductName,
