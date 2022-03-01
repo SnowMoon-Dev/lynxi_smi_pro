@@ -1,6 +1,7 @@
 # lynxi-smi-pro
 ![GitHub](https://img.shields.io/github/license/SnowMoon-Dev/lynxi_smi_pro?label=license)
 ![Latest GitHub release](https://img.shields.io/github/release/SnowMoon-Dev/lynxi_smi_pro.svg)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/SnowMoon-Dev/lynxi_apu_exporter)
 
 Get informations about the system's APU(s), through lynxi-smi.
 
